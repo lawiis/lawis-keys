@@ -12,6 +12,16 @@
 
 ---
 
+## 🖼️ Preview
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/lawiis/lawis-keys/main/src/assets/preview.png" alt="Lawis Keys preview screenshot" style="max-width:100%; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.6);" />
+</p>
+
+> Screenshot: Interactive 3D keyboard preview with glassmorphism and particle effects.
+
+---
+
 ## ✨ Features
 
 - 🔊 **Authentic Sound Packs**: Cherry MX, Alpaca, Creamy, Tactile, Vintage Typewriter, Clicky, Gaming switches, and fun meme sound packs.
