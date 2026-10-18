@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: https://cdn.discordapp.com; style-src 'self' 'unsafe-inline'; script-src 'self'; media-src 'self'; connect-src 'self' https://*.supabase.co" />
+  <title>Lawis Keys</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- fondo limpio sin animaciones pesadas -->
+    <div class="bg" aria-hidden="true">
+      <span class="bg-spot"></span>
+      <span class="bg-halo"></span>
+      <span class="bg-vignette"></span>
+      <canvas id="snow-canvas" class="snow-canvas"></canvas>
+    </div>
+
+    <!-- barra de titulo -->
+    <header class="titlebar">
+      <div class="brand">
+        <span class="brand-logo-wrap"><img src="logo.png" alt="" class="brand-logo" /></span>
+        <div class="brand-text">
+          <span class="brand-name">Lawis <b>Keys</b></span>
+          <span class="brand-sub">Mechanical Keyboard Sounds</span>
+        </div>
+      </div>
+      <div class="titlebar-right">
+        <button id="rank-btn" class="pill-btn" data-i18n-title="tip.ranking">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M5 3h14v2h2v3a4 4 0 0 1-4 4h-.35A5 5 0 0 1 13 15.9V18h3v2H8v-2h3v-2.1A5 5 0 0 1 7.35 12H7a4 4 0 0 1-4-4V5h2V3Zm0 4v1a2 2 0 0 0 2 2V7H5Zm14 0h-2v3a2 2 0 0 0 2-2V7Z"/></svg>
+          <span data-i18n="btn.ranking">Ranking</span>
+        </button>
+        <button id="admin-btn" class="icon-btn hidden" data-i18n-title="tip.admin">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1 3 5v6c0 5.05 3.84 9.76 9 11 5.16-1.24 9-5.95 9-11V5l-9-4Zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
+        </button>
+        <button id="settings-btn" class="icon-btn" data-i18n-title="tip.settings">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5Zm7.43-2.53a7.7 7.7 0 0 0 0-1.94l2.03-1.58a.5.5 0 0 0 .12-.63l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.4 7.4 0 0 0-1.68-.97l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.6.24-1.16.57-1.68.97l-2.39-.96a.5.5 0 0 0-.6.22L2.42 8.82a.5.5 0 0 0 .12.63l2.03 1.58a7.7 7.7 0 0 0 0 1.94l-2.03 1.58a.5.5 0 0 0-.12.63l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.52.4 1.08.73 1.68.97l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.6-.24 1.16-.57 1.68-.97l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.63Z"/></svg>
+        </button>
+        <div id="user-chip" class="user-chip hidden">
+          <img id="user-avatar" alt="" />
+          <span id="user-name"></span>
+          <button id="logout-btn" data-i18n-title="tip.logout">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm6.3 4.3-1.4 1.4L17.2 11H9v2h8.2l-2.3 2.3 1.4 1.4L21 12l-4.7-4.7Z"/></svg>
+          </button>
+        </div>
+        <div class="win-controls">
+          <button id="btn-tray" class="wc" data-i18n-title="tip.tray" title="Hide to tray">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm0 12h-3.17a3 3 0 0 1-5.66 0H5V5h14v10Z"/></svg>
+          </button>
+          <button id="btn-min" class="wc" data-i18n-title="tip.minimize">&#8211;</button>
+          <button id="btn-close" class="wc wc-close" data-i18n-title="tip.close">&#10005;</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- controles -->
+    <section class="toolbar">
+      <div class="ctrl ctrl-pack">
+        <label><span data-i18n="toolbar.keys">Sonido de teclas</span> <span id="vol-val" class="ctrl-val">70%</span></label>
+        <div class="select-wrap">
+          <select id="pack-select"></select>
+          <button id="pack-fav-btn" class="fav-quick-btn" type="button" data-i18n-title="tip.fav" title="Favorite">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </button>
+        </div>
+        <input id="volume" type="range" min="0" max="100" value="70" />
+      </div>
+
+      <div class="ctrl ctrl-pack">
+        <label><span data-i18n="toolbar.mouse">Sonido del ratón</span> <span id="mvol-val" class="ctrl-val">50%</span></label>
+        <div class="select-wrap">
+          <select id="mouse-select"></select>
+          <button id="mouse-fav-btn" class="fav-quick-btn" type="button" data-i18n-title="tip.fav" title="Favorite">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </button>
+        </div>
+        <input id="mouse-volume" type="range" min="0" max="100" value="50" />
+      </div>
+
+      <div class="ctrl ctrl-art">
+        <!-- decorativo y opcional: renderer.js lo oculta si el archivo no existe -->
+        <img id="toolbar-art" src="xd.png" alt="" class="toolbar-art" />
+      </div>
+
+      <div class="ctrl stat">
+        <label data-i18n="toolbar.count">Teclas</label>
+        <span id="key-count" class="count">0</span>
+      </div>
+    </section>
+
+    <!-- teclado 3D -->
+    <main class="keyboard-stage">
+      <div id="kb3d" class="kb3d"></div>
+    </main>
+
+    <!-- idioma (izquierda) y badges (derecha) -->
+    <footer class="footer">
+      <div class="lang-wrap">
+        <button id="lang-btn" class="lang-btn" data-i18n-title="tip.lang">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04ZM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12Zm-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+          <span id="lang-short">EN</span>
+        </button>
+        <div id="lang-pop" class="lang-pop hidden"></div>
+      </div>
+
+      <!-- comunidad discord -->
+      <div class="badges">
+        <button class="badge" data-link="discord" data-tip="discord.gg/47qGKsBKV3" data-i18n-title="tip.discord" title="Discord">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <div id="loading" class="loading hidden"><span class="spin"></span><span data-i18n="loading">Cargando sonido</span></div>
+  </div>
+
+  <!-- ===== RANKING ===== -->
+  <div id="lb-overlay" class="overlay hidden">
+    <div class="modal lb-modal">
+      <header class="modal-head">
+        <div>
+          <h3 data-i18n="lb.title">Ranking global</h3>
+          <p class="modal-sub" data-i18n="lb.sub">Quién ha pulsado más teclas. Solo cuentan teclas distintas.</p>
+        </div>
+        <button id="lb-close" class="modal-close" data-i18n-title="tip.close">&#10005;</button>
+      </header>
+
+      <div id="lb-podium" class="podium"></div>
+      <div class="lb-scroll"><ol id="lb-list" class="lb-list"></ol></div>
+      <div id="lb-me" class="lb-me hidden"></div>
+      <p id="lb-status" class="modal-status"></p>
+    </div>
+  </div>
+
+  <!-- ===== AJUSTES ===== -->
+  <div id="set-overlay" class="overlay hidden">
+    <div class="modal set-modal">
+      <header class="modal-head">
+        <div>
+          <h3 data-i18n="set.title">Ajustes</h3>
+          <p class="modal-sub" data-i18n="set.sub">Se guardan solos en este equipo.</p>
+        </div>
+        <button id="set-close" class="modal-close" data-i18n-title="tip.close">&#10005;</button>
+      </header>
+
+      <div class="modal-tabs">
+        <button id="tab-btn-gen" class="modal-tab on" data-i18n="tab.general">General</button>
+        <button id="tab-btn-theme" class="modal-tab" data-i18n="tab.appearance">Themes &amp; FX</button>
+      </div>
+
+      <div class="set-body">
+        <!-- Tab 1: General -->
+        <div id="panel-general" class="tab-panel">
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.rpc">Rich Presence de Discord</b><span data-i18n="set.rpc.d">Muestra "Using Lawis Keys" en tu perfil</span></div>
+            <button id="rpc-toggle" class="switch" role="switch" aria-checked="true"><span></span></button>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.tray">Close to tray</b><span data-i18n="set.tray.d">Keep app running in system tray when closing</span></div>
+            <button id="tray-toggle" class="switch" role="switch" aria-checked="true"><span></span></button>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.mouse">Sonido del ratón</b><span data-i18n="set.mouse.d">Suena al hacer clic, con su propio volumen</span></div>
+            <button id="mouse-toggle" class="switch" role="switch" aria-checked="true"><span></span></button>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.release">Sonido al soltar la tecla</b><span data-i18n="set.release.d">Solo en los packs que lo traen</span></div>
+            <button id="release-toggle" class="switch" role="switch" aria-checked="false"><span></span></button>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.sway">Movimiento del teclado</b><span data-i18n="set.sway.d">Balanceo lento cuando no lo tocas</span></div>
+            <button id="sway-toggle" class="switch" role="switch" aria-checked="false"><span></span></button>
+          </div>
+        </div>
+
+        <!-- Tab 2: Themes & FX -->
+        <div id="panel-theme" class="tab-panel hidden">
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.apptheme">Tema de la interfaz</b><span data-i18n="set.apptheme.d">Elige el estilo visual de la aplicación</span></div>
+            <div class="seg" id="app-theme-seg">
+              <button data-apptheme="dark" data-i18n="theme.dark">Dark Obsidian</button>
+              <button data-apptheme="glass" data-i18n="theme.glass">Liquid Glass</button>
+              <button data-apptheme="cyber" data-i18n="theme.cyber">Cyber Glow</button>
+            </div>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.snow">Efecto Copos de Nieve</b><span data-i18n="set.snow.d">Nieve suave que reacciona al teclear</span></div>
+            <button id="snow-toggle" class="switch" role="switch" aria-checked="true"><span></span></button>
+          </div>
+
+          <div class="set-sep"></div>
+
+          <div class="set-row set-row-color">
+            <div class="set-label"><b data-i18n="set.accent">Color de la interfaz</b><span data-i18n="set.accent.d">Tiñe toda la app y la luz del teclado</span></div>
+            <div class="color-pick">
+              <div class="swatches" id="accent-swatches"></div>
+            </div>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.theme">Color del teclado</b><span data-i18n="set.theme.d">Todo en blanco y negro</span></div>
+            <div class="seg" id="theme-seg">
+              <button data-theme="Panda" data-i18n="theme.Panda">Panda</button>
+              <button data-theme="Blanco" data-i18n="theme.Blanco">Blanco</button>
+              <button data-theme="Negro" data-i18n="theme.Negro">Negro</button>
+            </div>
+          </div>
+
+          <div class="set-row">
+            <div class="set-label"><b data-i18n="set.light">Retroiluminación</b><span data-i18n="set.light.d">Luz blanca bajo las teclas</span></div>
+            <div class="seg" id="light-seg">
+              <button data-light="react" data-i18n="light.react">Reactiva</button>
+              <button data-light="solid" data-i18n="light.solid">Fija</button>
+              <button data-light="breathe" data-i18n="light.breathe">Respira</button>
+              <button data-light="off" data-i18n="light.off">Apagada</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN ===== -->
+  <div id="adm-overlay" class="overlay hidden">
+    <div class="modal adm-modal">
+      <header class="modal-head">
+        <div>
+          <h3 data-i18n="adm.title">Panel de administracion</h3>
+          <p class="modal-sub" id="adm-mode"></p>
+        </div>
+        <button id="adm-close" class="modal-close" data-i18n-title="tip.close">&#10005;</button>
+      </header>
+
+      <div class="adm-search">
+        <input id="adm-query" type="text" data-i18n-placeholder="adm.search" placeholder="Buscar por nombre o ID" />
+        <button id="adm-refresh" class="ghost-btn" data-i18n="adm.refresh">Buscar</button>
+      </div>
+
+      <div class="adm-scroll"><div id="adm-list" class="adm-list"></div></div>
+      <p id="adm-status" class="modal-status"></p>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN ===== -->
+  <div id="login" class="login-screen">
+    <div class="grain"></div>
+    <div class="login-bg"><span class="orb orb1"></span><span class="orb orb2"></span></div>
+    <div class="login-card">
+      <span class="login-logo-wrap"><img src="logo.png" alt="" class="login-logo" /></span>
+      <h1>Lawis <b>Keys</b></h1>
+      <p class="login-desc" data-i18n="login.desc">Inicia sesión para empezar a teclear.</p>
+      <button id="login-btn" class="discord-btn">
+        <img class="discord-btn-logo" src="discord-logo.png" alt="" />
+        <span id="login-btn-text" data-i18n="login.btn">Iniciar sesión con Discord</span>
+      </button>
+      <p class="login-err" id="login-err"></p>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="keymap.js"></script>
+  <script src="categories.js"></script>
+  <script src="audio-engine.js"></script>
+  <script src="keyboard3d.js"></script>
+  <script src="custom-select.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

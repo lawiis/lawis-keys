@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Local configuration & Secrets (JANGAN DI-COMMIT)
+electron/config.local.js
+.session.json
+*.log
+
+# OS & Temp files
+.DS_Store
+Thumbs.db

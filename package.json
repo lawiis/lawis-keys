@@ -1,0 +1,17 @@
+{
+  "name": "lawis-keys",
+  "productName": "Lawis Keys",
+  "version": "1.0.0",
+  "description": "Simulador de teclado mecanico con sonidos reales, estilo MechaKeys - by Lawis",
+  "main": "electron/main.js",
+  "author": "Lawis",
+  "license": "MIT",
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.2.0",
+    "uiohook-napi": "1.5.5"
+  },
+  "allowScripts": {
+    "electron@32.3.3": true,
+    "uiohook-napi@1.5.5": true
+  }
+}
